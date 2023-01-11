@@ -155,8 +155,11 @@ def polish_seq(i, ref, reads_fa, outdir, rounds, type, polish_tool,binpath=""):
 
     if polish_tool == 'racon':
         for k in range(rounds):
-            if type == 'pb' or type == 'ont':
+            if type == 'pb':
                 os.system("{}minimap2 --secondary=no -x map-{} -c -t {} {} {} 2>/dev/null |cut -f 1-12 >{}"
+                          .format(binpath,type, 1, tmp_fa, reads_fa, polish_paf))
+            if type == 'ont':
+                os.system("{}minimap2 --secondary=no -k 17 -x map-{} -c -t {} {} {} 2>/dev/null |cut -f 1-12 >{}"
                           .format(binpath,type, 1, tmp_fa, reads_fa, polish_paf))
             elif type == 'hifi':
                 os.system("{}minimap2 --secondary=no -x asm20  -c -t {} {} {} 2>/dev/null |cut -f 1-12 >{}".
@@ -178,8 +181,11 @@ def polish_seq(i, ref, reads_fa, outdir, rounds, type, polish_tool,binpath=""):
         coverage = 0  # Approximate mean coverage of the reads
         flag = True
         for k in range(rounds):
-            if type == 'pb' or type == 'ont':
+            if type == 'pb':
                 os.system("{}minimap2 --secondary=no -ax map-{} -t {} {} {} 2>/dev/null|samtools view -Sb  - > {}".
+                          format(binpath,type, 1, tmp_fa, reads_fa, polish_bam))
+            if type == 'ont':
+                os.system("{}minimap2 --secondary=no -k 17 -ax map-{} -t {} {} {} 2>/dev/null|samtools view -Sb  - > {}".
                           format(binpath,type, 1, tmp_fa, reads_fa, polish_bam))
             elif type == 'hifi':
                 os.system("{}minimap2 --secondary=no -ax asm20 -t {} {} {} 2>/dev/null|samtools view -Sb  - > {}".
@@ -251,8 +257,11 @@ def scan_seq_by_depth(i, hap, err_consensus_fa, reads_fa, outdir, min_cov, type,
 
     # compute coverage for each base, filter secondary and supplementary alignments at first
     bam = outdir + "/" + str(i) + ".polished.bam"
-    if type == 'ont' or type == 'pb':
+    if type == 'pb':
         os.system(binpath+"minimap2 -ax map-" + type + " --secondary=no -t 1 " + err_consensus_fa + " " + reads_fa + \
+                  "  2>/dev/null |"+binpath+"samtools view -hS -F 2048 -|"+binpath+"samtools sort -@ 1 - >" + bam)
+    if type == 'ont':
+        os.system(binpath+"minimap2 -k 17 -ax map-" + type + " --secondary=no -t 1 " + err_consensus_fa + " " + reads_fa + \
                   "  2>/dev/null |"+binpath+"samtools view -hS -F 2048 -|"+binpath+"samtools sort -@ 1 - >" + bam)
     elif type == 'hifi':
         os.system(binpath+"minimap2 -ax asm20 --secondary=no -t 1 " + err_consensus_fa + " " + reads_fa + \

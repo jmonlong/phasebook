@@ -109,7 +109,7 @@ def compute_ovlp(fastx_i, fastx_j, outdir, threads, platform,genomesize, min_ovl
                       raise RuntimeError("failed to compute the read overlaps")
         elif platform == 'ont':# use cut -f 1-12 and then use fpa to prevent big RAM.
             print('ONT platform')
-            if os.system("minimap2 -cx ava-ont  -t {} \
+            if os.system("minimap2 -k 17 -cx ava-ont  -t {} \
                         {}  {}  |cut -f 1-12 |awk '$11>={} && $10/$11 >={} ' |fpa drop -i -m  >{}"
                       .format(threads, fastx_i, fastx_j, min_ovlp_len, min_identity, ovlp_file)
                       )!=0:
@@ -131,7 +131,7 @@ def compute_ovlp(fastx_i, fastx_j, outdir, threads, platform,genomesize, min_ovl
                       raise RuntimeError("failed to compute the read overlaps")
         elif platform == 'ont':
             print('ONT platform')
-            if os.system("minimap2 -x ava-ont  -t {} \
+            if os.system("minimap2 -k 17 -x ava-ont  -t {} \
                         {}  {}  |cut -f 1-12 |awk '$11>={} && $10/$11 >={} ' |fpa drop -i -m  >{}"
                       .format(threads, fastx_i, fastx_j, min_ovlp_len, min_identity, ovlp_file)
                       ) !=0:
@@ -182,7 +182,7 @@ def compute_ovlp_hpc(fastx_i, fastx_j, outdir, threads, platform,genomesize, min
                       )
         elif platform == 'ont':# use cut -f 1-12 and then use fpa to prevent big RAM.
             print('ONT platform')
-            fw.write("{}minimap2 -cx ava-ont -k15 -Xw5 -m100 -g10000 -r2000 --max-chain-skip 25  -t {} \
+            fw.write("{}minimap2 -cx ava-ont -k17 -Xw5 -m100 -g10000 -r2000 --max-chain-skip 25  -t {} \
                         {}  {} 2>/dev/null |cut -f 1-12 |awk '$11>={} && $10/$11 >={} ' |{}fpa drop -i -m  >{}\n"
                       .format(binpath,threads, fastx_i, fastx_j, min_ovlp_len, min_identity,binpath, ovlp_file)
                       )
@@ -201,7 +201,7 @@ def compute_ovlp_hpc(fastx_i, fastx_j, outdir, threads, platform,genomesize, min
                       )
         elif platform == 'ont':
             print('ONT platform')
-            fw.write("{}minimap2 -x ava-ont -k15 -Xw5 -m100 -g10000 -r2000 --max-chain-skip 25  -t {} \
+            fw.write("{}minimap2 -x ava-ont -k17 -Xw5 -m100 -g10000 -r2000 --max-chain-skip 25  -t {} \
                         {}  {} 2>/dev/null |cut -f 1-12 |awk '$11>={} && $10/$11 >={} ' |{}fpa drop -i -m  >{}\n"
                       .format(binpath,threads, fastx_i, fastx_j, min_ovlp_len, min_identity, binpath,ovlp_file)
                       )

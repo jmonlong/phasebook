@@ -6,8 +6,11 @@ def get_bam(i, ref, fasta, outdir, type,binpath=""):
     prefix = str(i)
     bam = outdir + '/' + prefix + ".bam"
     # TODO: is cigar necessary?
-    if type == 'pb' or type == 'ont':
+    if type == 'pb':
         os.system(binpath+"minimap2 -ax map-" + type + " -t 1 --secondary=no " + ref + " " + fasta + \
+                  " 2>/dev/null |"+binpath+"samtools view -hS -F 2048 - |"+binpath+"samtools sort -@ 1 - >" + bam)
+    if type == 'ont':
+        os.system(binpath+"minimap2 -k 17 -ax map-" + type + " -t 1 --secondary=no " + ref + " " + fasta + \
                   " 2>/dev/null |"+binpath+"samtools view -hS -F 2048 - |"+binpath+"samtools sort -@ 1 - >" + bam)
     elif type == 'hifi':
         os.system(binpath+"minimap2 -ax asm20 -t 1 --secondary=no " + ref + " " + fasta + \

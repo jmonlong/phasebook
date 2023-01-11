@@ -226,7 +226,7 @@ def cal_supereads_overlap(fasta, outdir, threads, min_ovlp_len, min_identity, o,
     paf = outdir + '/supereads.tmp.paf'
     filtered_paf = outdir + '/supereads.paf'
     if super_ovlp_fast:
-        os.system("minimap2 -x ava-ont --end-bonus 100 -t {} \
+        os.system("minimap2 -k 17 -x ava-ont --end-bonus 100 -t {} \
                         {}  {} 2>/dev/null|awk '$11>={} && $10/$11 >={} ' |fpa drop -i -m  >{}"
                       .format(threads, fasta, fasta, min_ovlp_len, min_identity, filtered_paf)
                       )
