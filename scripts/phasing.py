@@ -9,7 +9,7 @@ def get_bam(i, ref, fasta, outdir, type,binpath=""):
     if type == 'pb':
         os.system(binpath+"minimap2 -ax map-" + type + " -t 1 --secondary=no " + ref + " " + fasta + \
                   " 2>/dev/null |"+binpath+"samtools view -hS -F 2048 - |"+binpath+"samtools sort -@ 1 - >" + bam)
-    if type == 'ont':
+    elif type == 'ont':
         os.system(binpath+"minimap2 -k 17 -ax map-" + type + " -t 1 --secondary=no " + ref + " " + fasta + \
                   " 2>/dev/null |"+binpath+"samtools view -hS -F 2048 - |"+binpath+"samtools sort -@ 1 - >" + bam)
     elif type == 'hifi':

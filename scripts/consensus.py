@@ -175,7 +175,7 @@ def final_polish_xx(ctg_file, utg2supereads_tmp, polish_tool, n_final_polish, ou
                         os.system(
                             "minimap2 --secondary=no -c -x map-{} -t {} {} {} 2>/dev/null|cut -f 1-12 |awk '$11>={} && $10/$11>={}' >{}".
                             format(type, threads, tmp_fa, reads_fa, min_ovlp_len, min_identity, polish_paf))
-                    if type == 'ont':
+                    elif type == 'ont':
                         os.system(
                             "minimap2 --secondary=no -k 17 -c -x map-{} -t {} {} {} 2>/dev/null|cut -f 1-12 |awk '$11>={} && $10/$11>={}' >{}".
                             format(type, threads, tmp_fa, reads_fa, min_ovlp_len, min_identity, polish_paf))
@@ -200,10 +200,11 @@ def final_polish_xx(ctg_file, utg2supereads_tmp, polish_tool, n_final_polish, ou
                         os.system("minimap2 --secondary=no -ax map-{} -t {} {} {} 2>/dev/null " +
                                   "| samtools view -Sb  -F 2048  - > {}".
                                   format(type, threads, tmp_fa, reads_fa, polish_bam))
-                    if type == 'ont':
+                    elif type == 'ont':
                         os.system("minimap2 --secondary=no -k 17 -ax map-{} -t {} {} {} 2>/dev/null " +
                                   "| samtools view -Sb  -F 2048  - > {}".
-                                  format(type, threads, tmp_fa, reads_fa, polish_bam))                    elif type == 'hifi':
+                                  format(type, threads, tmp_fa, reads_fa, polish_bam))
+                    elif type == 'hifi':
                         os.system("minimap2 --secondary=no -ax asm20 -t {} {} {} 2>/dev/null " +
                                   "| samtools view -Sb  -F 2048 - > {}".
                                   format(threads, tmp_fa, reads_fa, polish_bam))
@@ -287,7 +288,7 @@ def final_polish_single(param):
                 os.system(
                     "minimap2 --secondary=no -c -x map-{} -t {} {} {} 2>/dev/null|cut -f 1-12 |awk '$11>={} && $10/$11>={}' >{}".
                     format(type, threads, tmp_fa, reads_fa, min_ovlp_len, min_identity, polish_paf))
-            if type == 'ont':
+            elif type == 'ont':
                 os.system(
                     "minimap2 --secondary=no -k 17 -c -x map-{} -t {} {} {} 2>/dev/null|cut -f 1-12 |awk '$11>={} && $10/$11>={}' >{}".
                     format(type, threads, tmp_fa, reads_fa, min_ovlp_len, min_identity, polish_paf))
@@ -313,7 +314,7 @@ def final_polish_single(param):
                 os.system("minimap2 --secondary=no -ax map-{} -t {} {} {} 2>/dev/null " +
                           "| samtools view -Sb  -F 2048  - > {}".
                           format(type, threads, tmp_fa, reads_fa, polish_bam))
-            if type == 'ont':
+            elif type == 'ont':
                 os.system("minimap2 --secondary=no -k 17 -ax map-{} -t {} {} {} 2>/dev/null " +
                           "| samtools view -Sb  -F 2048  - > {}".
                           format(type, threads, tmp_fa, reads_fa, polish_bam))
